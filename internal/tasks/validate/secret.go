@@ -1,8 +1,15 @@
 package validate
 
 import (
-	"fmt"
+	"github.com/google/uuid"
+	"log"
 	"net/http"
+	"strings"
+)
+
+const (
+	authHeaderName = "X-idThings-Password"
+	uriPrefix      = "/identities/"
 )
 
 // FetchSecretInterface fetches a secret from persistent storage
@@ -13,14 +20,29 @@ type FetchSecretInterface interface {
 // Secret runs
 func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 
-	id := "id"
+	// extract guid from http request
+	id := strings.Replace(r.URL.RequestURI(), uriPrefix, "", 1)
+	_, err := uuid.Parse(id)
+	if err != nil {
+		log.Println("validate.Secret(): id not a valid guid")
+		return http.StatusNotFound, "Not Found"
+	}
+
+	passwordString := r.Header.Get(authHeaderName) // case insensitive
+	if len(passwordString) == 0 {
+		log.Println("validate.Secret(): auth header string empty")
+		return http.StatusBadRequest, "Bad Request: missing header"
+	}
 
 	secret, err := store.FetchSecret(id)
 	if err != nil {
-		return http.StatusInternalServerError, err.Error()
+		log.Println("validate.Secret():", err.Error())
+		return http.StatusInternalServerError, "Internal error\n"
 	}
 
-	response := fmt.Sprintf("{%s,%s}\n", id, secret)
+	if secret == passwordString {
+		return http.StatusOK, "OK\n"
+	}
 
-	return http.StatusOK, response
+	return http.StatusUnauthorized, "Unauthorized\n"
 }

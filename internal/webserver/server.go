@@ -15,7 +15,7 @@ func Start() {
 	http.HandleFunc("/", mw(handlerDefault))
 
 	http.HandleFunc("/identities/new/", mw(handlerCreateIdentity))
-	http.HandleFunc("/identities/", mw(handlerDefault))
+	http.HandleFunc("/identities/", mw(handlerValidate))
 
 	log.Println("webserver.Start(): listening on port", webserverPort)
 	log.Fatal(http.ListenAndServe(":"+webserverPort, nil))
