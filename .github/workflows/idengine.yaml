@@ -57,7 +57,7 @@ jobs:
         CK_PORT: 6379
 
     - name: Build
-      run: go build -v -o idengine cmd/*.go
+      run: go build -v -o idengine cmd/apiserver/*.go
 
     - if: github.event_name == 'push' # && github.ref == 'refs/heads/master'
       name: Deploy To Docker
