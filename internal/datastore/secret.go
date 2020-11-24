@@ -3,9 +3,7 @@ package datastore
 import (
 	"errors"
 	"fmt"
-	"github.com/go-redis/redis/v8"
 	"log"
-	"time"
 )
 
 // StoreSecret stores
@@ -22,12 +20,8 @@ func (d *Datastore) StoreSecret(id string, secret string) error {
 	}
 
 	key := fmt.Sprintf(identitySecretsKeyFormat, id)
-	timestamp := time.Now().UnixNano() / 1e6 // convert to milliseconds
 
-	_, err := d.client.ZAdd(d.ctx, key, &redis.Z{
-		Score:  float64(timestamp),
-		Member: secret,
-	}).Result()
+	_, err := d.client.Set(d.ctx, key, secret, 0).Result()
 	if err != nil {
 		return err
 	}
@@ -42,5 +36,12 @@ func (d *Datastore) FetchSecret(id string) (string, error) {
 
 	log.Println("datastore.FetchSecret():", id)
 
-	return "", nil
+	key := fmt.Sprintf(identitySecretsKeyFormat, id)
+
+	secret, err := d.client.Get(d.ctx, key).Result()
+	if err != nil {
+		return "", err
+	}
+
+	return secret, nil
 }
