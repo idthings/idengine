@@ -13,7 +13,7 @@ const (
 var (
 	lowerCharSet   = "abcdedfghijklmnopqrst"
 	upperCharSet   = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	specialCharSet = "!@#$%&*"
+	specialCharSet = "@#%&*()" // except problematic shell chars: !$
 	numberSet      = "0123456789"
 	allCharSet     = lowerCharSet + upperCharSet + specialCharSet + numberSet
 )
