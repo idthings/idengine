@@ -9,7 +9,6 @@ import (
 
 const (
 	authHeaderName = "X-idThings-Password"
-	uriPrefix      = "/identities/"
 )
 
 // FetchSecretInterface fetches a secret from persistent storage
@@ -20,8 +19,10 @@ type FetchSecretInterface interface {
 // Secret runs
 func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 
-	// extract guid from http request
-	id := strings.Replace(r.URL.RequestURI(), uriPrefix, "", 1)
+	// extract guid from http request, the last element
+	elements := strings.Split(r.URL.RequestURI(), "/") // always returns 1 element
+	id := elements[len(elements)-1]
+
 	_, err := uuid.Parse(id)
 	if err != nil {
 		log.Println("validate.Secret(): id not a valid guid")
@@ -44,5 +45,6 @@ func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 		return http.StatusOK, "OK\n"
 	}
 
+	log.Println()
 	return http.StatusUnauthorized, "Unauthorized\n"
 }

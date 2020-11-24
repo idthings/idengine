@@ -31,6 +31,18 @@ var testSecretItems = []struct {
 		expectedResponse: "OK\n",
 	},
 	{
+		comment: "valid request, long path",
+		method:  "GET",
+		url:     "http://localhost/some/extension/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30",
+		headers: headerMap{
+			"X-idThings-Password": "UCg0&3DBR%C%q0D!5!*9",
+		},
+		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
+		mockReturnError:  nil,
+		expectedStatus:   200,
+		expectedResponse: "OK\n",
+	},
+	{
 		comment: "invalid password",
 		method:  "GET",
 		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30",
