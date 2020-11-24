@@ -1,6 +1,7 @@
-# idengine
-
-The goal is an easy to use identity and authentication service, mainly for IoT and mobile app developers.
+### Project Goals
+* an easy to deploy identity and authentication infrastructure service
+* pragmatic approach focused on improving many rather than perfecting the few
+* develop a simple yet robust set of methods
 
 #### Get an identity: /identities/new/
 Your remote device or mobile app can obtain an identity dynamically, like this:
