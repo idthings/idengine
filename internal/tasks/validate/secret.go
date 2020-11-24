@@ -20,7 +20,7 @@ type FetchSecretInterface interface {
 func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 
 	// extract guid from http request, the last element
-	elements := strings.Split(r.URL.RequestURI(), "/") // always returns 1 element
+	elements := strings.Split(r.URL.RequestURI(), "/") // always returns at least one element
 	id := elements[len(elements)-1]
 
 	_, err := uuid.Parse(id)
