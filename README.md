@@ -14,9 +14,8 @@ Resetting the device turns it back into a mere receptical.
 
 ### Project Goals
 * an easy to deploy identity and authentication infrastructure service
-* pragmatic approach focused on improving many rather than perfecting the few
-* encourage dynamic credential automation within applications and infrastructure
-* develop a simple yet robust implementation
+* encourage dynamic credential automation for applications and infrastructure
+* develop a simple and understandable implementation
 
 ### Audience
 * IoT hackers and makers, idEngine easily scales to millions of credentials (or use idThings.io)
@@ -39,7 +38,7 @@ Your remote devices will send requests to your own API, such as a data ping of a
 The device sends a header with either their password, or a computed HMAC digest.
 Your API simply proxies this header in an authentiction request to the idengine service.
 
-Here are simple password authentication examples, using the idengine service at idThings.io:
+Here are simple password authentication examples, using the idEngine service at idThings.io:
 ```
 $ curl -I https://api.idthings.io/identities/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
     -H "X-idThings-Password: 03Yg@&8F0OJM*6*@MDO0"
@@ -50,6 +49,13 @@ $ curl -I https://api.idthings.io/identities/be39aaa1-3ab2-4855-9b13-d1bae9410ba
 HTTP/1.1 401 Unauthorized
 
 $
+```
+For sentient devices it's a very short step to using HMAC digests to sign http requests to your API.
+This means the device secret isn't transmitted with every call.
+```
+$ curl -I https://api.idthings.io/identities/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
+    -H "X-idThings-Digest: c7fc567324b236e...,1604573826351,my device data"
+HTTP/1.1 200 OK
 ```
 #### Rotate secrets: /identities/rotate/&lt;guid&gt;
 Your remote device can rotate its own password, receiving a fresh one with this request:
