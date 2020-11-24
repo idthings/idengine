@@ -14,7 +14,6 @@ var (
 
 func init() {
 	ds.Info()
-	log.Println("here")
 	ds.Connect()
 }
 
