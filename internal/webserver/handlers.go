@@ -26,6 +26,16 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
+func handlerRotateSecret(w http.ResponseWriter, r *http.Request) {
+
+	log.Println("webserver.handlerRotateSecret(): request ", r.Method, r.URL.Path)
+
+	status, response := create.RotateSecret(&ds, r)
+
+	w.WriteHeader(status)
+	w.Write([]byte(response))
+}
+
 func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	// defaults
@@ -37,7 +47,6 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 	// a password validation
 	if r.Header.Get("X-idThings-Password") != "" {
 		status, response = validate.Secret(&ds, r)
-
 	}
 
 	w.WriteHeader(status)
