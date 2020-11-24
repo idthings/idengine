@@ -25,6 +25,46 @@ Resetting the device turns it back into a mere receptical.
 
 ---
 
+### Quick Start
+To get up and running quickly, use docker-compose to deploy idengine and redis containers.
+```
+$ cat docker-compose.yml
+version: '3'
+services:
+    idengine:
+        image: thisdougb/idengine:latest
+        ports:
+            - "8000:8000"
+    redis:
+        image: redis:alpine
+        ports:
+            - "6379:6379"
+```
+Bring up the containers:
+```
+$ docker-compose up -d
+Creating network "root_default" with the default driver
+Pulling idengine (thisdougb/idengine:latest)...
+latest: Pulling from thisdougb/idengine
+188c0c94c7c5: Pull complete
+0ef7d3d256c8: Pull complete
+eb1a45c31d19: Pull complete
+53441b811652: Pull complete
+Pulling redis (redis:alpine)...
+alpine: Pulling from library/redis
+67b3665cee45: Pull complete
+0705890dd1f7: Pull complete
+Creating root_idengine_1 ... done
+Creating root_redis_1    ... done
+```
+And quick test:
+```
+$ curl localhost:8000/identities/new/
+{3bbaa59a-a78c-4665-8b86-c7f31276bd83,D4K80A2NN@C@YjQ%66*n}
+```
+
+---
+
 ### API Summary
 #### Get an identity: /identities/new/
 Your remote device or mobile app can obtain an identity dynamically, like this:
