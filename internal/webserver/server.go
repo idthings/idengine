@@ -23,10 +23,10 @@ func Start() {
 
 	mw := nestedMiddleware()
 
+	http.HandleFunc("/identities/new/", mw(handlerCreateIdentity))
+	http.HandleFunc("/identities/rotate/", mw(handlerRotateSecret))
+	http.HandleFunc("/identities/", mw(handlerValidate))
 	http.HandleFunc("/", mw(handlerDefault))
-
-	http.HandleFunc("/api/identities/new/", mw(handlerCreateIdentity))
-	http.HandleFunc("/api/identities/", mw(handlerValidate))
 
 	log.Println("webserver.Start(): listening on port", webserverPort)
 	log.Fatal(http.ListenAndServe(":"+webserverPort, nil))
