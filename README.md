@@ -54,7 +54,7 @@ For sentient devices it's a very short step to using HMAC digests to sign http r
 This means the device secret isn't transmitted with every call.
 ```
 $ curl -I https://api.idthings.io/identities/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
-    -H "X-idThings-Digest: c7fc567324b236e...,1604573826351,my device data"
+    -H "X-idThings-Digest: HMAC-SHA256,c7fc567324b236e...,1604573826351,my device data"
 HTTP/1.1 200 OK
 ```
 #### Rotate secrets: /identities/rotate/&lt;guid&gt;
