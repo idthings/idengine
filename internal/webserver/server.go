@@ -1,11 +1,22 @@
 package webserver
 
 import (
+	"github.com/idthings/idengine/internal/datastore"
 	"log"
 	"net/http"
 )
 
 const webserverPort = "8000"
+
+var (
+	ds = datastore.Datastore{}
+)
+
+func init() {
+	ds.Info()
+	log.Println("here")
+	ds.Connect()
+}
 
 // Start starts
 func Start() {

@@ -1,16 +1,13 @@
 package webserver
 
 import (
-	"github.com/idthings/idengine/internal/datastore"
 	"github.com/idthings/idengine/internal/tasks/create"
 	"github.com/idthings/idengine/internal/tasks/validate"
 	"log"
 	"net/http"
 )
 
-var (
-	ds datastore.Datastore
-)
+var ()
 
 func handlerDefault(w http.ResponseWriter, r *http.Request) {
 
@@ -23,7 +20,7 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerCreateIdentity(): request ", r.Method, r.URL.Path)
 
-	status, response := create.Identity(ds, r)
+	status, response := create.Identity(&ds, r)
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
@@ -39,7 +36,7 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	// a password validation
 	if r.Header.Get("X-idThings-Password") != "" {
-		status, response = validate.Secret(ds, r)
+		status, response = validate.Secret(&ds, r)
 
 	}
 
