@@ -1,8 +1,32 @@
+### idEngine
+The idEngine came about when I was developing an IoT product, and needed an way to deploy millions of identities (user id, secret) to devices.
+Prototyping with the Arduino Nano 33 IoT, it was clear there are significant logical security challenges in deploying credentials.
+
+There is almost nothing secret on an IoT device, so factory installed credentials seems like fools gold.
+The common case where a device is reset also raises the question, of whether a secret can be rotated safely?
+
+In addition, there are significant scaling challenges to running a credential service running into the millions of accounts.
+The keywords here, from an old infrstructure guy, are: simplicity, robustness, automation.
+
+My approach is to treat an IoT device, and to a lesser extent a mobile app install, as simple a receptical that can hold a credential.
+However, until a credential is deployed that device has no identity.
+Resetting the device turns it back into a mere receptical.
+
 ### Project Goals
 * an easy to deploy identity and authentication infrastructure service
 * pragmatic approach focused on improving many rather than perfecting the few
-* develop a simple yet robust set of methods
+* encourage dynamic credential automation within applications and infrastructure
+* develop a simple yet robust implementation
 
+### Audience
+* IoT hackers and makers, idEngine easily scales to millions of credentials (or use idThings.io)
+* Developers in a micro-service environment, or building mobile apps with minimal backend APIs
+* DevOps folk who need to manage storage and services containing credentials
+* People interested in improving the traditional user/password key-pair approach
+
+---
+
+### API Summary
 #### Get an identity: /identities/new/
 Your remote device or mobile app can obtain an identity dynamically, like this:
 ```
