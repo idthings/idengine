@@ -1,0 +1,66 @@
+name: idengine
+
+on:
+  push:
+      branches:
+          - '*'
+  pull_request:
+      branches:
+          - master
+
+jobs:
+  build:
+    name: idengine
+    runs-on: ubuntu-latest
+
+        # Service containers to run with `container-job`
+    services:
+      # Label used to access the service container
+      redis:
+        # Docker Hub image
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+    - name: Set up Go 1.x
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+
+    - name: Get dependencies
+      run: |
+        go get -v -t -d ./...
+        if [ -f Gopkg.toml ]; then
+            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+            dep ensure
+        fi
+
+    - name: Go Unit Test
+      run: go test ./... -count=1
+      env:
+        CK_HOST: localhost
+        CK_PORT: 6379
+
+    - name: Build
+      run: go build -v -o idengine cmd/apiserver/*.go
+
+    - if: github.event_name == 'push' # && github.ref == 'refs/heads/master'
+      name: Deploy To Docker
+      uses: docker/build-push-action@v1.1.0
+      with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+          repository: thisdougb/idengine
+          tags: latest
+          #tag_with_ref: true
