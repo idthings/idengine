@@ -115,3 +115,37 @@ curl https://api.idthings.io/identities/rotate/18896661-e861-47a2-b724-629a07a4c
     -H "x-idthings-password: #*P3ZO9F941L4C&L#s%C"
 {"id":"18896661-e861-47a2-b724-629a07a4c67d","secret":"m3GH7X5KCC#)0i(&CaIO"}
 ```
+
+---
+
+### Computing Digests
+Digests are calculated by the message sender and recipient, and then compared.
+In this way, the shared secret is not sent in the request (as is the case with password authentication).
+
+The digest header has the following format (type,digest,timestamp,data):
+```
+"X-idThings-Digest": "HMAC-SHA256,f62100c007ec7630a6d65c0d7d745dae5a21da5d8474722e6aa065c15b6ca9c0,1604573826351,my data"
+```
+In idEngine digests are valid for five minutes, so will be rejected as '401 Digest Expired'.
+#### HMAC-SHA256
+To calculate an HMAC-256 digest:
+```
+timestamp := time.Now().UnixNano() / 1e6         // convert to milliseconds
+timestampStr := strconv.FormatInt(timestamp, 10) // convert to string type
+
+stringToSign := fmt.Sprintf("HMAC-SHA256,%s,%s,%s", id, timestampStr, "my data")
+
+signingKey := GenerateDigest(secret, timestampStr)
+digest := GenerateDigest(signingKey, stringToSign)
+
+digestHeader := fmt.Sprintf("HMAC-SHA256,%s,%s,%s", digest, timestampStr, "my data")
+```
+And the GenerateDigest method:
+```
+func GenerateDigest(secret string, message string) string {
+
+	h := hmac.New(sha256.New, []byte(secret))
+	h.Write([]byte(message))
+	return hex.EncodeToString(h.Sum(nil))
+}
+```
