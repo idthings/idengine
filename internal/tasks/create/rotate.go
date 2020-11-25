@@ -22,12 +22,14 @@ type RotateSecretInterface interface {
 // RotateSecret runs
 func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 
+	var i identity
+
 	// extract guid from http request, the last element
-	elements := strings.Split(r.URL.RequestURI(), "/") // always returns at least one element
-	id := elements[len(elements)-1]
+	elements := strings.Split(r.URL.Path, "/") // always returns at least one element
+	i.ID = elements[len(elements)-1]
 
 	// valid guid string format
-	_, err := uuid.Parse(id)
+	_, err := uuid.Parse(i.ID)
 	if err != nil {
 		log.Println("create.RotateSecret(): id not a valid guid")
 		return http.StatusNotFound, "Not Found"
@@ -41,7 +43,7 @@ func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 	}
 
 	// fetch existing password for this id
-	secret, err := store.FetchSecret(id)
+	secret, err := store.FetchSecret(i.ID)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
 		return http.StatusInternalServerError, "Internal error\n"
@@ -51,13 +53,28 @@ func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 		return http.StatusUnauthorized, "Unauthorized\n"
 	}
 
-	newSecret := data.NewPassword()
+	i.Secret = data.NewPassword() // our new secret
 
-	if err := store.StoreSecret(id, newSecret); err != nil {
+	if err := store.StoreSecret(i.ID, i.Secret); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 
-	response := fmt.Sprintf("{%s}\n", secret)
+	var format string
+	if val, ok := r.URL.Query()["format"]; ok { // returns a slice
+		format = val[0]
+	}
+
+	var response string
+
+	switch format {
+	case "json":
+		response = responseAsJSONString(i)
+
+	default:
+		response = fmt.Sprintf("{%s,%s}\n", i.ID, i.Secret)
+	}
+
+	//	response := fmt.Sprintf("{%s}\n", secret)
 
 	return http.StatusOK, response
 }

@@ -29,6 +29,13 @@ var testIdentityItems = []struct {
 		mockReturnValue: errors.New("data store error"),
 		expectedInt:     500,
 	},
+	{
+		comment:         "valid request, json response",
+		method:          "GET",
+		url:             "http://localhost/identities/new/?format=json",
+		mockReturnValue: nil,
+		expectedInt:     200,
+	},
 }
 
 type mockSecretStore struct {
@@ -53,5 +60,26 @@ func TestGetIdentityGUID(t *testing.T) {
 
 		status, _ := Identity(mock, req)
 		assert.Equal(t, item.expectedInt, status, item.comment)
+	}
+}
+
+var testJSONResponseItems = []struct {
+	comment     string
+	id          string
+	secret      string
+	returnValue string
+}{
+	{
+		comment:     "valid id, secret",
+		id:          "cbfbe13d-0ab4-487e-89bf-276dcd646a30",
+		secret:      "UCg0&3DBR%C%q0D!5!*9",
+		returnValue: `{"id":"cbfbe13d-0ab4-487e-89bf-276dcd646a30","secret":"UCg0&3DBR%C%q0D!5!*9"}`,
+	},
+}
+
+func TestJSONResponse(t *testing.T) {
+	for _, item := range testJSONResponseItems {
+		i := identity{item.id, item.secret}
+		assert.Equal(t, item.returnValue+"\n", responseAsJSONString(i), item.comment)
 	}
 }
