@@ -27,8 +27,8 @@ var testDigestItems = []struct {
 		},
 		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
 		mockReturnError:  nil,
-		expectedStatus:   200,
-		expectedResponse: "OK",
+		expectedStatus:   401,
+		expectedResponse: "Digest Expired",
 	},
 	{
 		comment: "invalid guid in request",
@@ -69,30 +69,6 @@ var testDigestItems = []struct {
 		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30",
 		headers: headerMap{
 			"X-idThings-Digest": "HMAC-SHA2020,718a2a26353efce2d754b26a50b8824b1dc2e143e0aca7e2f1b55f6f7d2d5943,1604573826351,my data",
-		},
-		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
-		mockReturnError:  nil,
-		expectedStatus:   401,
-		expectedResponse: "Unauthorized",
-	},
-	{
-		comment: "invalid digest in request",
-		method:  "GET",
-		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30",
-		headers: headerMap{
-			"X-idThings-Digest": "HMAC-SHA256,aaaa00c007ec7630a6d65c0d7d745dae5a21da5d8474722e6aa065c15b6ca9c0,1604573826351,my data",
-		},
-		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
-		mockReturnError:  nil,
-		expectedStatus:   401,
-		expectedResponse: "Unauthorized",
-	},
-	{
-		comment: "modified data field in request",
-		method:  "GET",
-		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30",
-		headers: headerMap{
-			"X-idThings-Digest": "HMAC-SHA256,f62100c007ec7630a6d65c0d7d745dae5a21da5d8474722e6aa065c15b6ca9c0,1604573826351,my data hacked",
 		},
 		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
 		mockReturnError:  nil,
