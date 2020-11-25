@@ -3,7 +3,9 @@ package validate
 import (
 	"github.com/google/uuid"
 	"log"
+	"strconv"
 	"strings"
+	"time"
 )
 
 func extractGUID(urlPath string) (string, error) {
@@ -19,4 +21,22 @@ func extractGUID(urlPath string) (string, error) {
 	}
 
 	return id, nil
+}
+
+func timeWithinMinutes(t string, sinceMinutes int) bool {
+
+	inputTime, err := strconv.ParseInt(t, 10, 64)
+	if err != nil {
+		return false
+	}
+
+	timestamp := time.Now().UnixNano() / 1e6
+
+	diff := timestamp - inputTime
+
+	if int(diff) < sinceMinutes*60 {
+		return true
+	}
+
+	return false
 }

@@ -9,12 +9,13 @@ import (
 )
 
 const (
-	digestHeaderName   = "X-idThings-Digest"
-	digestHeaderFields = 4
-	digestTypeField    = 0
-	digestField        = 1
-	digestEpochField   = 2
-	digestDataField    = 3
+	digestHeaderName    = "X-idThings-Digest"
+	digestHeaderFields  = 4
+	digestTypeField     = 0
+	digestField         = 1
+	digestEpochField    = 2
+	digestDataField     = 3
+	maxDigestAgeMinutes = 5
 )
 
 // Digest validates an input digest with content
@@ -57,6 +58,7 @@ func Digest(store FetchSecretInterface, r *http.Request) (int, string) {
 		return http.StatusUnauthorized, "Unauthorized"
 	}
 
+	timeWithinMinutes(values[digestEpochField], maxDigestAgeMinutes)
 	if computedDigest == values[digestField] {
 		return http.StatusOK, "OK"
 	}

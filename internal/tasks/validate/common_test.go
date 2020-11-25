@@ -2,7 +2,9 @@ package validate
 
 import (
 	"github.com/stretchr/testify/assert"
+	"strconv"
 	"testing"
+	"time"
 )
 
 var testExtractGUIDItems = []struct {
@@ -40,4 +42,15 @@ func TestExtractGUID(t *testing.T) {
 		}
 		assert.Equal(t, item.expectedResult, result, item.comment)
 	}
+}
+
+func TestTimeWithinMinutes(t *testing.T) {
+
+	timestamp := time.Now().UnixNano() / 1e6         // convert to milliseconds
+	timestampStr := strconv.FormatInt(timestamp, 10) // convert to string type
+
+	assert.Equal(t, true, timeWithinMinutes(timestampStr, 5), "time is now")
+	assert.Equal(t, false, timeWithinMinutes("1604573826351", 5), "time is old")
+	assert.Equal(t, false, timeWithinMinutes("", 5), "time is empty")
+	assert.Equal(t, false, timeWithinMinutes("16045738263511604573826351", 5), "time is beyond int64")
 }
