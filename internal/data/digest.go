@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 )
 
-// GenerateDigest uses SHA512 to return a digest
+// GenerateDigest uses SHA256 to return a digest
 func GenerateDigest(secret string, message string) string {
 
 	h := hmac.New(sha256.New, []byte(secret))
