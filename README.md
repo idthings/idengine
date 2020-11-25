@@ -28,7 +28,7 @@ Resetting the device turns it back into a mere receptacle.
 ### Quick Start
 To get up and running quickly, use docker-compose to deploy idengine and redis containers.
 ```
-$ cat docker-compose.yml
+# docker-compose.yml
 version: '3'
 services:
     idengine:
