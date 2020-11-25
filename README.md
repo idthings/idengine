@@ -18,7 +18,7 @@ Resetting the device turns it back into a mere receptacle.
 * develop a simple and understandable implementation
 
 ### Audience
-* IoT hackers and makers, who needs easy to test and deploy credentials
+* IoT hackers and makers, who need easy to test and deploy credentials
 * Developers in a micro-service environment, or building mobile apps with minimal backend APIs
 * DevOps folk who need to manage storage and services containing credentials
 * People interested in improving on the traditional user/password key-pair approach
@@ -105,7 +105,7 @@ The default format is intended to be easy to consume on lower powered IoT device
 Typically these languages are string-challenged, so we try to make it as easy as possible.
 Search your response stream for curly braces, and that's your data.
 
-However, when requesting new identities or rotating secrets, you can a;sp specify the response in JSON format.
+However, when requesting new identities or rotating secrets, you can also specify the response in JSON format.
 If that's what's easiest for your code.
 ```
 curl "https://api.idthings.io/identities/new/?format=json"
