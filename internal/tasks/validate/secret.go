@@ -1,10 +1,8 @@
 package validate
 
 import (
-	"github.com/google/uuid"
 	"log"
 	"net/http"
-	"strings"
 )
 
 const (
@@ -19,13 +17,9 @@ type FetchSecretInterface interface {
 // Secret runs
 func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 
-	// extract guid from http request, the last element
-	elements := strings.Split(r.URL.Path, "/") // always returns at least one element
-	id := elements[len(elements)-1]
-
-	_, err := uuid.Parse(id)
+	// get the requesting device id
+	id, err := extractGUID(r.URL.Path)
 	if err != nil {
-		log.Println("validate.Secret(): id not a valid guid")
 		return http.StatusNotFound, "Not Found"
 	}
 
@@ -45,6 +39,5 @@ func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 		return http.StatusOK, "OK\n"
 	}
 
-	log.Println()
 	return http.StatusUnauthorized, "Unauthorized\n"
 }

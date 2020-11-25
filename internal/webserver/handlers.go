@@ -47,6 +47,8 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 	// a password validation
 	if r.Header.Get("X-idThings-Password") != "" {
 		status, response = validate.Secret(&ds, r)
+	} else if r.Header.Get("X-idThings-Digest") != "" {
+		status, response = validate.Digest(&ds, r)
 	}
 
 	w.WriteHeader(status)
