@@ -71,7 +71,6 @@ Your remote device or mobile app can obtain an identity, like this:
 ```
 $ curl https://api.idthings.io/identities/new/
 {be39aaa1-3ab2-4855-9b13-d1bae9410baf,03Yg@&8F0OJM*6*@MDO0}
-$
 ```
 #### Authenticate a request: /identities/&lt;guid&gt;
 When remote devices send requests to your own API, they include an auth header (password or digest).
@@ -86,8 +85,6 @@ HTTP/1.1 200 OK
 $ curl -I https://api.idthings.io/identities/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
     -H "X-idThings-Password: wrong-password"
 HTTP/1.1 401 Unauthorized
-
-$
 ```
 For sentient devices it's a very short step to using HMAC digests to sign http requests to your API.
 This means the device secret isn't transmitted with every call.
@@ -102,8 +99,6 @@ Your remote device can rotate its own password, receiving a fresh one with this 
 $ curl https://api.idthings.io/identities/rotate/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
     -H "X-idThings-Password: 03Yg@&8F0OJM*6*@MDO0"
 {be39aaa1-3ab2-4855-9b13-d1bae9410baf,WEN*86I9t3OUq0#))D4T}
-
-$
 ```
 #### Output formatting
 The default format is intended to be easy to consume on lower powered IoT devices, running C-type languages.
