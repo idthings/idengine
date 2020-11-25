@@ -102,7 +102,22 @@ Your remote device can rotate its own password, receiving a fresh one with this 
 ```
 $ curl https://api.idthings.io/identities/rotate/be39aaa1-3ab2-4855-9b13-d1bae9410baf \
     -H "X-idThings-Password: 03Yg@&8F0OJM*6*@MDO0"
-{WEN*86I9t3OUq0#))D4T}
+{be39aaa1-3ab2-4855-9b13-d1bae9410baf,WEN*86I9t3OUq0#))D4T}
 
 $
+```
+#### Output formatting
+The default format is intended to be easy to consume on lower powered IoT devices, running C-type languages.
+Typically these languages are string-challenged, so we try to make it as easy as possible.
+Search your response stream for curly braces, and that's your data.
+
+However, when requesting new identities or rotating secrets, you can a;sp specify the response in JSON format.
+If that's what's easiest for your code.
+```
+curl "https://api.idthings.io/identities/new/?format=json"
+{"id":"18896661-e861-47a2-b724-629a07a4c67d","secret":"#*P3ZO9F941L4C&L#s%C"}
+
+curl https://api.idthings.io/identities/rotate/18896661-e861-47a2-b724-629a07a4c67d?format=json \
+    -H "x-idthings-password: #*P3ZO9F941L4C&L#s%C"
+{"id":"18896661-e861-47a2-b724-629a07a4c67d","secret":"m3GH7X5KCC#)0i(&CaIO"}
 ```
