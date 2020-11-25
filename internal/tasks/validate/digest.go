@@ -51,19 +51,21 @@ func Digest(store FetchSecretInterface, r *http.Request) (int, string) {
 
 	switch values[digestTypeField] {
 	case "HMAC-SHA256":
-		stringToSign := fmt.Sprintf("%s,%s,%s", id, values[digestEpochField], values[digestDataField])
+		stringToSign := fmt.Sprintf("HMAC-SHA256,%s,%s,%s", id, values[digestEpochField], values[digestDataField])
 		computedDigest = computeHMACSHA256(secret, values[digestEpochField], stringToSign)
 	default:
 		log.Println("validate.Digest(): missing digest type in header")
 		return http.StatusUnauthorized, "Unauthorized"
 	}
 
-	timeWithinMinutes(values[digestEpochField], maxDigestAgeMinutes)
-	if computedDigest == values[digestField] {
-		return http.StatusOK, "OK"
+	if !timeWithinMinutes(values[digestEpochField], maxDigestAgeMinutes) {
+		return http.StatusUnauthorized, "Digest Expired"
 	}
+	if computedDigest != values[digestField] {
+		return http.StatusUnauthorized, "Digest Incorrect"
+	}
+	return http.StatusOK, "OK"
 
-	return http.StatusUnauthorized, "Unauthorized"
 }
 
 // computeHMACSHA256 computes a digest in an IoT friendly way, intended for
