@@ -25,6 +25,7 @@ func Start() {
 	http.HandleFunc("/identities/new/", mw(handlerCreateIdentity))
 	http.HandleFunc("/identities/rotate/", mw(handlerRotateSecret))
 	http.HandleFunc("/identities/", mw(handlerValidate))
+	http.HandleFunc("/epoch/", mw(handlerEpoch))
 	http.HandleFunc("/", mw(handlerDefault))
 
 	log.Println("webserver.Start(): listening on port", webserverPort)
