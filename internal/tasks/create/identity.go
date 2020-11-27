@@ -17,8 +17,12 @@ type identity struct {
 
 // StoreSecretInterface stores a secret for an id in persistent storage
 type StoreSecretInterface interface {
-	StoreSecret(id string, secret string) error
+	StoreSecret(id string, secret string, expirationDays int) error
 }
+
+const (
+	expirationDays = 7 // default secret expiry
+)
 
 // Identity runs
 func Identity(store StoreSecretInterface, r *http.Request) (int, string) {
@@ -27,7 +31,7 @@ func Identity(store StoreSecretInterface, r *http.Request) (int, string) {
 	i.ID = uuid.New().String()
 	i.Secret = data.NewPassword()
 
-	if err := store.StoreSecret(i.ID, i.Secret); err != nil {
+	if err := store.StoreSecret(i.ID, i.Secret, expirationDays); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 
