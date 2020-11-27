@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"time"
 )
 
 // StoreSecret stores
-func (d *Datastore) StoreSecret(id string, secret string) error {
+func (d *Datastore) StoreSecret(id string, secret string, expirationDays int) error {
 
 	log.Println("datastore.StoreSecret():", id, secret)
 
@@ -21,7 +22,9 @@ func (d *Datastore) StoreSecret(id string, secret string) error {
 
 	key := fmt.Sprintf(identitySecretsKeyFormat, id)
 
-	_, err := d.client.Set(d.ctx, key, secret, 0).Result()
+	expiration := time.Duration(expirationDays) * (time.Hour * 24)
+
+	_, err := d.client.Set(d.ctx, key, secret, expiration).Result()
 	if err != nil {
 		return err
 	}

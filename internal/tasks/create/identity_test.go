@@ -42,7 +42,7 @@ type mockSecretStore struct {
 	returnValue error
 }
 
-func (m mockSecretStore) StoreSecret(id string, secret string) error {
+func (m mockSecretStore) StoreSecret(id string, secret string, expirationDays int) error {
 	return m.returnValue
 }
 

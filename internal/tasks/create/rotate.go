@@ -16,7 +16,7 @@ const (
 // RotateSecretInterface rotates
 type RotateSecretInterface interface {
 	FetchSecret(id string) (string, error)
-	StoreSecret(id string, secret string) error
+	StoreSecret(id string, secret string, expirationDays int) error
 }
 
 // RotateSecret runs
@@ -55,7 +55,7 @@ func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 
 	i.Secret = data.NewPassword() // our new secret
 
-	if err := store.StoreSecret(i.ID, i.Secret); err != nil {
+	if err := store.StoreSecret(i.ID, i.Secret, expirationDays); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 

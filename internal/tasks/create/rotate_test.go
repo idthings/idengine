@@ -144,7 +144,7 @@ type mockRotateSecretStore struct {
 	storeReturnError  error
 }
 
-func (m mockRotateSecretStore) StoreSecret(id string, secret string) error {
+func (m mockRotateSecretStore) StoreSecret(id string, secret string, expirationDays int) error {
 	return m.storeReturnError
 }
 
