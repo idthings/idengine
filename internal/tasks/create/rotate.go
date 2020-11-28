@@ -67,11 +67,11 @@ func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 	var response string
 
 	switch format {
-	case "json":
-		response = responseAsJSONString(i)
+	case "stream":
+		response = fmt.Sprintf("{%s,%s}", i.ID, i.Secret)
 
 	default:
-		response = fmt.Sprintf("{%s,%s}\n", i.ID, i.Secret)
+		response = responseAsJSONString(i)
 	}
 
 	//	response := fmt.Sprintf("{%s}\n", secret)
