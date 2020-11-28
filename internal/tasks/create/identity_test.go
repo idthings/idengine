@@ -32,7 +32,7 @@ var testIdentityItems = []struct {
 	{
 		comment:         "valid request, json response",
 		method:          "GET",
-		url:             "http://localhost/identities/new/?format=json",
+		url:             "http://localhost/identities/new/?format=stream",
 		mockReturnValue: nil,
 		expectedInt:     200,
 	},
