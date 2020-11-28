@@ -26,6 +26,7 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
+	w.Write([]byte("\n"))
 }
 
 func handlerRotateSecret(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +37,7 @@ func handlerRotateSecret(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
+	w.Write([]byte("\n"))
 }
 
 func handlerValidate(w http.ResponseWriter, r *http.Request) {
@@ -55,6 +57,7 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
+	w.Write([]byte("\n"))
 }
 
 // returns unix timestamp, intended for electronic devices with no
@@ -69,4 +72,5 @@ func handlerEpoch(w http.ResponseWriter, r *http.Request) {
 
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte(response))
+	w.Write([]byte("\n"))
 }
