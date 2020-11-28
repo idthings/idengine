@@ -35,6 +35,19 @@ var testRotateItems = []struct {
 		expectedResponse:  "OK\n",
 	},
 	{
+		comment: "valid request stream format",
+		method:  "GET",
+		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30?format=stream",
+		headers: headerMap{
+			"X-idThings-Password": "UCg0&3DBR%C%q0D!5!*9",
+		},
+		fetchReturnString: "UCg0&3DBR%C%q0D!5!*9",
+		fetchReturnError:  nil,
+		storeReturnError:  nil,
+		expectedStatus:    200,
+		expectedResponse:  "OK\n",
+	},
+	{
 		comment: "valid request, json response",
 		method:  "GET",
 		url:     "http://localhost/identities/cbfbe13d-0ab4-487e-89bf-276dcd646a30?format=json",
