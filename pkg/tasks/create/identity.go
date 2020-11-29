@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/idthings/idengine/internal/data"
+	"github.com/idthings/idengine/pkg/data"
 	"log"
 	"net/http"
 )
@@ -21,7 +21,7 @@ type StoreSecretInterface interface {
 }
 
 const (
-	expirationDays = 7 // default secret expiry
+	expirationDays = 1 // default credential expiry
 )
 
 // Identity runs
