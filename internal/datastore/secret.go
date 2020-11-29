@@ -20,7 +20,7 @@ func (d *Datastore) StoreSecret(id string, secret string, expirationDays int) er
 		return errors.New("datastore.StoreSecret(): invalid secret")
 	}
 
-	key := fmt.Sprintf(identitySecretsKeyFormat, id)
+	key := fmt.Sprintf(defaultIdentitySecretKeyFormat, id)
 
 	expiration := time.Duration(expirationDays) * (time.Hour * 24)
 
@@ -39,7 +39,7 @@ func (d *Datastore) FetchSecret(id string) (string, error) {
 
 	log.Println("datastore.FetchSecret():", id)
 
-	key := fmt.Sprintf(identitySecretsKeyFormat, id)
+	key := fmt.Sprintf(defaultIdentitySecretKeyFormat, id)
 
 	secret, err := d.client.Get(d.ctx, key).Result()
 	if err != nil {
