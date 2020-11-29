@@ -2,4 +2,4 @@ package datastore
 
 import ()
 
-const defaultIdentitySecretKeyFormat = "app:identities:default:%s:secret"
+const defaultIdentitySecretKeyFormat = "app:identities:%s:secret"
