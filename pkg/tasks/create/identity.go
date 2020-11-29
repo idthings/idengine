@@ -21,7 +21,7 @@ type StoreSecretInterface interface {
 }
 
 const (
-	expirationDays = 7 // default secret expiry
+	expirationDays = 1 // default credential expiry
 )
 
 // Identity runs
