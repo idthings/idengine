@@ -20,13 +20,11 @@ func init() {
 // Start starts
 func Start() {
 
-	mw := nestedMiddleware()
-
-	http.HandleFunc("/identities/new/", mw(handlerCreateIdentity))
-	http.HandleFunc("/identities/rotate/", mw(handlerRotateSecret))
-	http.HandleFunc("/identities/", mw(handlerValidate))
-	http.HandleFunc("/epoch/", mw(handlerEpoch))
-	http.HandleFunc("/", mw(handlerDefault))
+	http.HandleFunc("/identities/new/", handlerCreateIdentity)
+	http.HandleFunc("/identities/rotate/", handlerRotateSecret)
+	http.HandleFunc("/identities/", handlerValidate)
+	http.HandleFunc("/epoch/", handlerEpoch)
+	http.HandleFunc("/", handlerDefault)
 
 	log.Println("webserver.Start(): listening on port", webserverPort)
 	log.Fatal(http.ListenAndServe(":"+webserverPort, nil))
