@@ -16,7 +16,7 @@ type FetchSecretInterface interface {
 }
 
 // Secret runs
-func Secret(ctx context.Context, store FetchSecretInterface, r *http.Request) (int, string) {
+func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 
 	// get the requesting device id
 	id, err := extractGUID(r.URL.Path)
@@ -30,7 +30,7 @@ func Secret(ctx context.Context, store FetchSecretInterface, r *http.Request) (i
 		return http.StatusBadRequest, "Bad Request: missing header"
 	}
 
-	secret, err := store.FetchSecret(ctx, id)
+	secret, err := store.FetchSecret(r.Context(), id)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
 		return http.StatusInternalServerError, "Internal error"

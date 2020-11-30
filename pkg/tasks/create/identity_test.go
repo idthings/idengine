@@ -52,8 +52,6 @@ func TestGetIdentityGUID(t *testing.T) {
 	var mock mockSecretStore
 	var req *http.Request
 
-	ctx := context.Background()
-
 	for _, item := range testIdentityItems {
 
 		mock.returnValue = item.mockReturnValue
@@ -61,7 +59,7 @@ func TestGetIdentityGUID(t *testing.T) {
 		byteBuf := bytes.NewBuffer([]byte(""))
 		req, _ = http.NewRequest(item.method, item.url, byteBuf)
 
-		status, _ := Identity(ctx, mock, req)
+		status, _ := Identity(mock, req)
 		assert.Equal(t, item.expectedInt, status, item.comment)
 	}
 }

@@ -170,7 +170,6 @@ func TestRotateSecretGUID(t *testing.T) {
 
 	var mock mockRotateSecretStore
 	var req *http.Request
-	ctx := context.Background()
 
 	for _, item := range testRotateItems {
 
@@ -185,7 +184,7 @@ func TestRotateSecretGUID(t *testing.T) {
 			req.Header.Add(k, v)
 		}
 
-		status, _ := RotateSecret(ctx, mock, req)
+		status, _ := RotateSecret(mock, req)
 		assert.Equal(t, item.expectedStatus, status, item.comment)
 	}
 }

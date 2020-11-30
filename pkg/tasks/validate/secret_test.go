@@ -119,8 +119,6 @@ func TestSecret(t *testing.T) {
 	var mock mockSecretStore
 	var req *http.Request
 
-	ctx := context.Background()
-
 	for _, item := range testSecretItems {
 
 		mock.returnString = item.mockReturnString
@@ -133,7 +131,7 @@ func TestSecret(t *testing.T) {
 			req.Header.Add(k, v)
 		}
 
-		status, response := Secret(ctx, mock, req)
+		status, response := Secret(mock, req)
 		assert.Equal(t, item.expectedStatus, status, item.comment)
 		assert.Equal(t, item.expectedResponse, response, item.comment)
 	}

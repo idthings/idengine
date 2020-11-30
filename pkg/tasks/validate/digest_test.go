@@ -2,7 +2,6 @@ package validate
 
 import (
 	"bytes"
-	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -95,8 +94,6 @@ func TestDigest(t *testing.T) {
 	var mock mockSecretStore
 	var req *http.Request
 
-	ctx := context.Background()
-
 	for _, item := range testDigestItems {
 
 		mock.returnString = item.mockReturnString
@@ -109,7 +106,7 @@ func TestDigest(t *testing.T) {
 			req.Header.Add(k, v)
 		}
 
-		status, response := Digest(ctx, mock, req)
+		status, response := Digest(mock, req)
 		assert.Equal(t, item.expectedStatus, status, item.comment)
 		assert.Equal(t, item.expectedResponse, response, item.comment)
 	}

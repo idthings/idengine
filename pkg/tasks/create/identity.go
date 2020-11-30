@@ -22,13 +22,13 @@ type StoreSecretInterface interface {
 }
 
 // Identity runs
-func Identity(ctx context.Context, store StoreSecretInterface, r *http.Request) (int, string) {
+func Identity(store StoreSecretInterface, r *http.Request) (int, string) {
 
 	var i identity
 	i.ID = uuid.New().String()
 	i.Secret = data.NewPassword()
 
-	if err := store.StoreSecret(ctx, i.ID, i.Secret); err != nil {
+	if err := store.StoreSecret(r.Context(), i.ID, i.Secret); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 
