@@ -10,7 +10,7 @@ import (
 // StoreSecret stores
 func (d *Datastore) StoreSecret(ctx context.Context, id string, secret string) error {
 
-	log.Println("datastore.StoreSecret():", id, secret)
+	//log.Println("datastore.StoreSecret():", id, secret) // use for development only
 
 	if len(id) < 1 {
 		return errors.New("datastore.StoreSecret(): invalid id")
