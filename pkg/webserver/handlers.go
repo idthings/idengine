@@ -15,7 +15,8 @@ func handlerDefault(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerDefault(): request ", r.Method, r.URL.Path)
 	w.WriteHeader(http.StatusOK)
-	w.Write([]byte("OK\n"))
+	w.Write([]byte("OK"))
+	w.Write([]byte("\n"))
 }
 
 func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +45,7 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	// defaults
 	status := http.StatusUnauthorized
-	response := "Unauthorized\n"
+	response := "Unauthorized"
 
 	log.Println("webserver.handlerValidate(): request ", r.Method, r.URL.Path)
 
