@@ -162,7 +162,7 @@ func (m mockRotateSecretStore) StoreSecret(ctx context.Context, id string, secre
 	return m.storeReturnError
 }
 
-func (m mockRotateSecretStore) FetchSecret(id string) (string, error) {
+func (m mockRotateSecretStore) FetchSecret(ctx context.Context, id string) (string, error) {
 	return m.fetchReturnString, m.fetchReturnError
 }
 

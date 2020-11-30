@@ -16,7 +16,7 @@ const (
 
 // RotateSecretInterface rotates
 type RotateSecretInterface interface {
-	FetchSecret(id string) (string, error)
+	FetchSecret(ctx context.Context, id string) (string, error)
 	StoreSecret(ctx context.Context, id string, secret string) error
 }
 
@@ -44,7 +44,7 @@ func RotateSecret(ctx context.Context, store RotateSecretInterface, r *http.Requ
 	}
 
 	// fetch existing password for this id
-	secret, err := store.FetchSecret(i.ID)
+	secret, err := store.FetchSecret(ctx, i.ID)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
 		return http.StatusInternalServerError, "Internal error\n"

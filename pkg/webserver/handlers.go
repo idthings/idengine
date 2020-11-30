@@ -24,8 +24,6 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 	log.Println("webserver.handlerCreateIdentity(): request ", r.Method, r.URL.Path)
 
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, "accessLevel", "production")
-
 	status, response := create.Identity(ctx, &ds, r)
 
 	w.WriteHeader(status)
@@ -54,11 +52,13 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerValidate(): request ", r.Method, r.URL.Path)
 
+	ctx := context.Background()
+
 	// a password validation
 	if r.Header.Get("X-idThings-Password") != "" {
-		status, response = validate.Secret(&ds, r)
+		status, response = validate.Secret(ctx, &ds, r)
 	} else if r.Header.Get("X-idThings-Digest") != "" {
-		status, response = validate.Digest(&ds, r)
+		status, response = validate.Digest(ctx, &ds, r)
 	}
 
 	w.WriteHeader(status)

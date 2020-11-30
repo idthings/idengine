@@ -2,6 +2,7 @@ package validate
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -107,7 +108,7 @@ type mockSecretStore struct {
 	returnError  error
 }
 
-func (m mockSecretStore) FetchSecret(id string) (string, error) {
+func (m mockSecretStore) FetchSecret(ctx context.Context, id string) (string, error) {
 	return m.returnString, m.returnError
 }
 
@@ -117,6 +118,8 @@ func TestSecret(t *testing.T) {
 
 	var mock mockSecretStore
 	var req *http.Request
+
+	ctx := context.Background()
 
 	for _, item := range testSecretItems {
 
@@ -130,7 +133,7 @@ func TestSecret(t *testing.T) {
 			req.Header.Add(k, v)
 		}
 
-		status, response := Secret(mock, req)
+		status, response := Secret(ctx, mock, req)
 		assert.Equal(t, item.expectedStatus, status, item.comment)
 		assert.Equal(t, item.expectedResponse, response, item.comment)
 	}

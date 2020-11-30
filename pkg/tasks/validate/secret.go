@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"context"
 	"log"
 	"net/http"
 )
@@ -11,11 +12,11 @@ const (
 
 // FetchSecretInterface fetches a secret from persistent storage
 type FetchSecretInterface interface {
-	FetchSecret(id string) (string, error)
+	FetchSecret(ctx context.Context, id string) (string, error)
 }
 
 // Secret runs
-func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
+func Secret(ctx context.Context, store FetchSecretInterface, r *http.Request) (int, string) {
 
 	// get the requesting device id
 	id, err := extractGUID(r.URL.Path)
@@ -29,7 +30,7 @@ func Secret(store FetchSecretInterface, r *http.Request) (int, string) {
 		return http.StatusBadRequest, "Bad Request: missing header"
 	}
 
-	secret, err := store.FetchSecret(id)
+	secret, err := store.FetchSecret(ctx, id)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
 		return http.StatusInternalServerError, "Internal error\n"

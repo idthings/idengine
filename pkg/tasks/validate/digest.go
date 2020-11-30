@@ -1,6 +1,7 @@
 package validate
 
 import (
+	"context"
 	"fmt"
 	"github.com/idthings/idengine/pkg/data"
 	"log"
@@ -19,7 +20,7 @@ const (
 )
 
 // Digest validates an input digest with content
-func Digest(store FetchSecretInterface, r *http.Request) (int, string) {
+func Digest(ctx context.Context, store FetchSecretInterface, r *http.Request) (int, string) {
 
 	// get the requesting device id
 	id, err := extractGUID(r.URL.Path)
@@ -41,7 +42,7 @@ func Digest(store FetchSecretInterface, r *http.Request) (int, string) {
 	}
 
 	// attempt to fetch the secret for this id
-	secret, err := store.FetchSecret(id)
+	secret, err := store.FetchSecret(ctx, id)
 	if err != nil {
 		log.Println("validate.Digest():", err.Error())
 		return http.StatusInternalServerError, "Internal error"

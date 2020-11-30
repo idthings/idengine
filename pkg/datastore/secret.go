@@ -32,7 +32,7 @@ func (d *Datastore) StoreSecret(ctx context.Context, id string, secret string) e
 }
 
 // FetchSecret fetches
-func (d *Datastore) FetchSecret(id string) (string, error) {
+func (d *Datastore) FetchSecret(ctx context.Context, id string) (string, error) {
 
 	log.Println("datastore.FetchSecret():", id)
 
