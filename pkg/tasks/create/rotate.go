@@ -47,11 +47,11 @@ func RotateSecret(ctx context.Context, store RotateSecretInterface, r *http.Requ
 	secret, err := store.FetchSecret(ctx, i.ID)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
-		return http.StatusInternalServerError, "Internal error\n"
+		return http.StatusInternalServerError, "Internal error"
 	}
 
 	if secret != passwordString {
-		return http.StatusUnauthorized, "Unauthorized\n"
+		return http.StatusUnauthorized, "Unauthorized"
 	}
 
 	i.Secret = data.NewPassword() // our new secret

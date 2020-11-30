@@ -33,12 +33,12 @@ func Secret(ctx context.Context, store FetchSecretInterface, r *http.Request) (i
 	secret, err := store.FetchSecret(ctx, id)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
-		return http.StatusInternalServerError, "Internal error\n"
+		return http.StatusInternalServerError, "Internal error"
 	}
 
 	if secret == passwordString {
-		return http.StatusOK, "OK\n"
+		return http.StatusOK, "OK"
 	}
 
-	return http.StatusUnauthorized, "Unauthorized\n"
+	return http.StatusUnauthorized, "Unauthorized"
 }
