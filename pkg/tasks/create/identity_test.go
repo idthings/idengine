@@ -2,6 +2,7 @@ package create
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -42,7 +43,7 @@ type mockSecretStore struct {
 	returnValue error
 }
 
-func (m mockSecretStore) StoreSecret(id string, secret string, expirationDays int) error {
+func (m mockSecretStore) StoreSecret(ctx context.Context, id string, secret string) error {
 	return m.returnValue
 }
 
@@ -51,6 +52,8 @@ func TestGetIdentityGUID(t *testing.T) {
 	var mock mockSecretStore
 	var req *http.Request
 
+	ctx := context.Background()
+
 	for _, item := range testIdentityItems {
 
 		mock.returnValue = item.mockReturnValue
@@ -58,7 +61,7 @@ func TestGetIdentityGUID(t *testing.T) {
 		byteBuf := bytes.NewBuffer([]byte(""))
 		req, _ = http.NewRequest(item.method, item.url, byteBuf)
 
-		status, _ := Identity(mock, req)
+		status, _ := Identity(ctx, mock, req)
 		assert.Equal(t, item.expectedInt, status, item.comment)
 	}
 }

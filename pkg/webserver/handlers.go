@@ -1,6 +1,7 @@
 package webserver
 
 import (
+	"context"
 	"github.com/idthings/idengine/pkg/tasks/create"
 	"github.com/idthings/idengine/pkg/tasks/validate"
 	"log"
@@ -22,7 +23,10 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerCreateIdentity(): request ", r.Method, r.URL.Path)
 
-	status, response := create.Identity(&ds, r)
+	ctx := context.Background()
+	ctx = context.WithValue(ctx, "accessLevel", "production")
+
+	status, response := create.Identity(ctx, &ds, r)
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
@@ -33,7 +37,9 @@ func handlerRotateSecret(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerRotateSecret(): request ", r.Method, r.URL.Path)
 
-	status, response := create.RotateSecret(&ds, r)
+	ctx := context.Background()
+
+	status, response := create.RotateSecret(ctx, &ds, r)
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))

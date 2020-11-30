@@ -2,6 +2,7 @@ package create
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -157,7 +158,7 @@ type mockRotateSecretStore struct {
 	storeReturnError  error
 }
 
-func (m mockRotateSecretStore) StoreSecret(id string, secret string, expirationDays int) error {
+func (m mockRotateSecretStore) StoreSecret(ctx context.Context, id string, secret string) error {
 	return m.storeReturnError
 }
 
@@ -169,6 +170,7 @@ func TestRotateSecretGUID(t *testing.T) {
 
 	var mock mockRotateSecretStore
 	var req *http.Request
+	ctx := context.Background()
 
 	for _, item := range testRotateItems {
 
@@ -183,7 +185,7 @@ func TestRotateSecretGUID(t *testing.T) {
 			req.Header.Add(k, v)
 		}
 
-		status, _ := RotateSecret(mock, req)
+		status, _ := RotateSecret(ctx, mock, req)
 		assert.Equal(t, item.expectedStatus, status, item.comment)
 	}
 }
