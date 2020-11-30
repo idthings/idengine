@@ -1,7 +1,6 @@
 package webserver
 
 import (
-	"context"
 	"github.com/idthings/idengine/pkg/tasks/create"
 	"github.com/idthings/idengine/pkg/tasks/validate"
 	"log"
@@ -23,8 +22,7 @@ func handlerCreateIdentity(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerCreateIdentity(): request ", r.Method, r.URL.Path)
 
-	ctx := context.Background()
-	status, response := create.Identity(ctx, &ds, r)
+	status, response := create.Identity(r.Context(), &ds, r)
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
@@ -35,9 +33,7 @@ func handlerRotateSecret(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerRotateSecret(): request ", r.Method, r.URL.Path)
 
-	ctx := context.Background()
-
-	status, response := create.RotateSecret(ctx, &ds, r)
+	status, response := create.RotateSecret(r.Context(), &ds, r)
 
 	w.WriteHeader(status)
 	w.Write([]byte(response))
@@ -52,13 +48,11 @@ func handlerValidate(w http.ResponseWriter, r *http.Request) {
 
 	log.Println("webserver.handlerValidate(): request ", r.Method, r.URL.Path)
 
-	ctx := context.Background()
-
 	// a password validation
 	if r.Header.Get("X-idThings-Password") != "" {
-		status, response = validate.Secret(ctx, &ds, r)
+		status, response = validate.Secret(r.Context(), &ds, r)
 	} else if r.Header.Get("X-idThings-Digest") != "" {
-		status, response = validate.Digest(ctx, &ds, r)
+		status, response = validate.Digest(r.Context(), &ds, r)
 	}
 
 	w.WriteHeader(status)
