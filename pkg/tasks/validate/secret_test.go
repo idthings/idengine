@@ -2,6 +2,7 @@ package validate
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -28,7 +29,7 @@ var testSecretItems = []struct {
 		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
 		mockReturnError:  nil,
 		expectedStatus:   200,
-		expectedResponse: "OK\n",
+		expectedResponse: "OK",
 	},
 	{
 		comment: "valid request, long path",
@@ -40,7 +41,7 @@ var testSecretItems = []struct {
 		mockReturnString: "UCg0&3DBR%C%q0D!5!*9",
 		mockReturnError:  nil,
 		expectedStatus:   200,
-		expectedResponse: "OK\n",
+		expectedResponse: "OK",
 	},
 	{
 		comment: "invalid password",
@@ -52,7 +53,7 @@ var testSecretItems = []struct {
 		mockReturnString: "UCg0&3DBR%C%q0D!5!*",
 		mockReturnError:  nil,
 		expectedStatus:   401,
-		expectedResponse: "Unauthorized\n",
+		expectedResponse: "Unauthorized",
 	},
 	{
 		comment: "invalid guid",
@@ -98,7 +99,7 @@ var testSecretItems = []struct {
 		mockReturnString: "",
 		mockReturnError:  errors.New("data store error"),
 		expectedStatus:   500,
-		expectedResponse: "Internal error\n",
+		expectedResponse: "Internal error",
 	},
 }
 
@@ -107,7 +108,7 @@ type mockSecretStore struct {
 	returnError  error
 }
 
-func (m mockSecretStore) FetchSecret(id string) (string, error) {
+func (m mockSecretStore) FetchSecret(ctx context.Context, id string) (string, error) {
 	return m.returnString, m.returnError
 }
 

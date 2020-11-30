@@ -2,6 +2,7 @@ package create
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -157,11 +158,11 @@ type mockRotateSecretStore struct {
 	storeReturnError  error
 }
 
-func (m mockRotateSecretStore) StoreSecret(id string, secret string, expirationDays int) error {
+func (m mockRotateSecretStore) StoreSecret(ctx context.Context, id string, secret string) error {
 	return m.storeReturnError
 }
 
-func (m mockRotateSecretStore) FetchSecret(id string) (string, error) {
+func (m mockRotateSecretStore) FetchSecret(ctx context.Context, id string) (string, error) {
 	return m.fetchReturnString, m.fetchReturnError
 }
 

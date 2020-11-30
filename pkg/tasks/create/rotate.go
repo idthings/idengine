@@ -1,6 +1,7 @@
 package create
 
 import (
+	"context"
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/idthings/idengine/pkg/data"
@@ -15,8 +16,8 @@ const (
 
 // RotateSecretInterface rotates
 type RotateSecretInterface interface {
-	FetchSecret(id string) (string, error)
-	StoreSecret(id string, secret string, expirationDays int) error
+	FetchSecret(ctx context.Context, id string) (string, error)
+	StoreSecret(ctx context.Context, id string, secret string) error
 }
 
 // RotateSecret runs
@@ -43,19 +44,19 @@ func RotateSecret(store RotateSecretInterface, r *http.Request) (int, string) {
 	}
 
 	// fetch existing password for this id
-	secret, err := store.FetchSecret(i.ID)
+	secret, err := store.FetchSecret(r.Context(), i.ID)
 	if err != nil {
 		log.Println("validate.Secret():", err.Error())
-		return http.StatusInternalServerError, "Internal error\n"
+		return http.StatusInternalServerError, "Internal error"
 	}
 
 	if secret != passwordString {
-		return http.StatusUnauthorized, "Unauthorized\n"
+		return http.StatusUnauthorized, "Unauthorized"
 	}
 
 	i.Secret = data.NewPassword() // our new secret
 
-	if err := store.StoreSecret(i.ID, i.Secret, expirationDays); err != nil {
+	if err := store.StoreSecret(r.Context(), i.ID, i.Secret); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 

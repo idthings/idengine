@@ -41,7 +41,7 @@ func Digest(store FetchSecretInterface, r *http.Request) (int, string) {
 	}
 
 	// attempt to fetch the secret for this id
-	secret, err := store.FetchSecret(id)
+	secret, err := store.FetchSecret(r.Context(), id)
 	if err != nil {
 		log.Println("validate.Digest():", err.Error())
 		return http.StatusInternalServerError, "Internal error"

@@ -1,16 +1,16 @@
 package datastore
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"log"
-	"time"
 )
 
 // StoreSecret stores
-func (d *Datastore) StoreSecret(id string, secret string, expirationDays int) error {
+func (d *Datastore) StoreSecret(ctx context.Context, id string, secret string) error {
 
-	log.Println("datastore.StoreSecret():", id, secret)
+	//log.Println("datastore.StoreSecret():", id, secret) // use for development only
 
 	if len(id) < 1 {
 		return errors.New("datastore.StoreSecret(): invalid id")
@@ -22,20 +22,17 @@ func (d *Datastore) StoreSecret(id string, secret string, expirationDays int) er
 
 	key := fmt.Sprintf(defaultIdentitySecretKeyFormat, id)
 
-	expiration := time.Duration(expirationDays) * (time.Hour * 24)
-
-	_, err := d.client.Set(d.ctx, key, secret, expiration).Result()
+	// set the secret value at key, with not expiry
+	_, err := d.client.Set(d.ctx, key, secret, 0).Result()
 	if err != nil {
 		return err
 	}
-
-	// TODO: limit set size to 10
 
 	return nil
 }
 
 // FetchSecret fetches
-func (d *Datastore) FetchSecret(id string) (string, error) {
+func (d *Datastore) FetchSecret(ctx context.Context, id string) (string, error) {
 
 	log.Println("datastore.FetchSecret():", id)
 

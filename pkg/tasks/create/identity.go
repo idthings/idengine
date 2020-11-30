@@ -2,6 +2,7 @@ package create
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"github.com/google/uuid"
@@ -17,12 +18,8 @@ type identity struct {
 
 // StoreSecretInterface stores a secret for an id in persistent storage
 type StoreSecretInterface interface {
-	StoreSecret(id string, secret string, expirationDays int) error
+	StoreSecret(ctx context.Context, id string, secret string) error
 }
-
-const (
-	expirationDays = 1 // default credential expiry
-)
 
 // Identity runs
 func Identity(store StoreSecretInterface, r *http.Request) (int, string) {
@@ -31,7 +28,7 @@ func Identity(store StoreSecretInterface, r *http.Request) (int, string) {
 	i.ID = uuid.New().String()
 	i.Secret = data.NewPassword()
 
-	if err := store.StoreSecret(i.ID, i.Secret, expirationDays); err != nil {
+	if err := store.StoreSecret(r.Context(), i.ID, i.Secret); err != nil {
 		return http.StatusInternalServerError, err.Error()
 	}
 
