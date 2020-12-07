@@ -12,7 +12,10 @@ type Datastore struct {
 	client *api.Client
 }
 
-// Connect attempts a connection to a Vault node
+// Connect attempts to configure connection and test with health check
+// Returns:
+//   true if we can check the Vault status
+//   false otherwise
 func (d *Datastore) Connect() bool {
 
 	d.info()
@@ -29,6 +32,15 @@ func (d *Datastore) Connect() bool {
 	}
 
 	d.client.SetToken(d.token)
+
+	sys := d.client.Sys()
+	health, err := sys.Health()
+	if err != nil {
+		log.Println("hashicorpvault.Connect(): connection failed. ", err.Error())
+		return false
+	}
+
+	log.Printf("Vault node: %s, Sealed: %t\n", health.ClusterName, health.Sealed)
 
 	return true
 }

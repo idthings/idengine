@@ -14,7 +14,6 @@ const (
 var TestInfoItems = []struct {
 	comment     string
 	envHost     string
-	envPort     string
 	envToken    string
 	expectHost  string
 	expectToken string
@@ -22,23 +21,20 @@ var TestInfoItems = []struct {
 	{
 		comment:     "test defaults, no env vars set",
 		envHost:     "",
-		envPort:     "",
 		envToken:    "",
-		expectHost:  "http://127.0.0.1",
-		expectToken: "root",
+		expectHost:  "http://127.0.0.1:8200",
+		expectToken: "developer",
 	},
 	{
 		comment:     "test host set from env",
 		envHost:     "myhost1",
-		envPort:     "",
 		envToken:    "",
 		expectHost:  "myhost1",
-		expectToken: "root",
+		expectToken: "developer",
 	},
 	{
 		comment:     "test everything set from env",
 		envHost:     "myvaulthost",
-		envPort:     "9999",
 		envToken:    "sometoken",
 		expectHost:  "myvaulthost",
 		expectToken: "sometoken",

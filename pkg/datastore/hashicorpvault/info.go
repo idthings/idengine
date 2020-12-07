@@ -5,8 +5,8 @@ import (
 )
 
 const (
-	defaultHost  = "http://127.0.0.1"
-	defaultToken = "root"
+	defaultHost  = "http://127.0.0.1:8200"
+	defaultToken = "developer"
 )
 
 // Info attempts to pull connection string from local env vars, or
