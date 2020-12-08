@@ -40,7 +40,7 @@ func (d *Datastore) Connect() bool {
 		return false
 	}
 
-	if !health.Sealed {
+	if health.Sealed {
 		log.Println("hashicorpvault.Connect(): connection failed. Vault is currently sealed.")
 		return false
 	}
