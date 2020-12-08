@@ -14,7 +14,7 @@ type Datastore struct {
 
 // Connect attempts to configure connection and test with health check
 // Returns:
-//   true if we can check the Vault status
+//   true if we connect and find Vault unsealed
 //   false otherwise
 func (d *Datastore) Connect() bool {
 
