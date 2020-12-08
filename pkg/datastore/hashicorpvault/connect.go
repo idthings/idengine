@@ -18,7 +18,7 @@ type Datastore struct {
 //   false otherwise
 func (d *Datastore) Connect() bool {
 
-	d.info()
+	d.info() // set defaults or use env vars
 
 	config := &api.Config{
 		Address: d.host,
@@ -40,7 +40,11 @@ func (d *Datastore) Connect() bool {
 		return false
 	}
 
-	log.Printf("Vault node: %s, Sealed: %t\n", health.ClusterName, health.Sealed)
-
+	if !health.Sealed {
+		log.Println("hashicorpvault.Connect(): connectioned failed. Vault is currently sealed.")
+		return false
+	}
+	
+	log.Printf("Successful connection to Vault node: %s\n", health.ClusterName)
 	return true
 }
