@@ -2,6 +2,7 @@ package hashicorpvault
 
 import (
 	"os"
+	"log"
 )
 
 const (
@@ -18,6 +19,7 @@ func (d *Datastore) info() {
 	value = os.Getenv("IDENGINE_VAULT_HOST")
 	if len(value) > 0 {
 		d.host = value
+		log.Println("hashicorpvault.info(): overriding vault host from env var IDENGINE_VAULT_HOST")
 	} else {
 		d.host = defaultHost
 	}
@@ -25,6 +27,7 @@ func (d *Datastore) info() {
 	value = os.Getenv("IDENGINE_VAULT_TOKEN")
 	if len(value) > 0 {
 		d.token = value
+		log.Println("hashicorpvault.info(): overriding vault host from env var IDENGINE_VAULT_TOKEN")
 	} else {
 		d.token = defaultToken
 	}
