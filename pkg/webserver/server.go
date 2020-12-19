@@ -8,7 +8,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"time"
 )
 
 const webserverPort = "8000"
@@ -23,18 +22,15 @@ func init() {
 	flag.Parse()
 
 	if *vaultPtr {
-
 		ds = &hashicorpvault.Datastore{}
-
-		result := ds.Connect()
-		if !result {
-			log.Println("Vault connection failed, exiting after 1 seconds.")
-			time.Sleep(1 * time.Second)
-			os.Exit(1)
-		}
 	} else {
 		ds = &redis.Datastore{}
-		ds.Connect()
+	}
+
+	result := ds.Connect()
+	if !result {
+		log.Println("Datasore connection failed, exiting...")
+		os.Exit(1)
 	}
 }
 

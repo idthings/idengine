@@ -39,8 +39,9 @@ func (d *Datastore) Connect() bool {
 	_, err = d.client.Ping(d.ctx).Result()
 	if err != nil {
 		fmt.Println("redis connect error: ", err)
+		return false
 	}
-	fmt.Println("datastore.Connect(): connected to redis.")
 
+	fmt.Println("datastore.Connect(): connected to redis.")
 	return true
 }
