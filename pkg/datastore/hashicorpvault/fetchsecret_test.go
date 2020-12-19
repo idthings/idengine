@@ -23,4 +23,10 @@ func TestFetchSecret(t *testing.T) {
 	response, err := ds.FetchSecret(ctx, "id")
 	assert.Equal(t, nil, err)
 	assert.Equal(t, "secret12345", response)
+
+	// test when there is no id
+	response, err = ds.FetchSecret(ctx, "id-fake")
+	assert.Equal(t, nil, err)
+	assert.Equal(t, "", response)
+
 }

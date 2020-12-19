@@ -22,12 +22,14 @@ func (d *Datastore) FetchSecret(ctx context.Context, id string) (string, error) 
 		return "", err
 	}
 
-	if data, ok := secret.Data["data"]; ok {
+	if secret != nil {
+		if data, ok := secret.Data["data"]; ok {
 
-		m := data.(map[string]interface{})
-		value := m["secret"].(string)
+			m := data.(map[string]interface{})
+			value := m["secret"].(string)
 
-		return value, nil
+			return value, nil
+		}
 	}
 
 	return "", nil
