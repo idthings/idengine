@@ -4,10 +4,10 @@ import (
 	"flag"
 	"github.com/idthings/idengine/pkg/datastore"
 	"github.com/idthings/idengine/pkg/datastore/hashicorpvault"
+	"github.com/idthings/idengine/pkg/datastore/redis"
 	"log"
 	"net/http"
 	"os"
-	"time"
 )
 
 const webserverPort = "8000"
@@ -22,18 +22,15 @@ func init() {
 	flag.Parse()
 
 	if *vaultPtr {
-
 		ds = &hashicorpvault.Datastore{}
-
-		result := ds.Connect()
-		if !result {
-			log.Println("Vault connection failed, exiting after 1 seconds.")
-			time.Sleep(1 * time.Second)
-			os.Exit(1)
-		}
 	} else {
-		ds = &datastore.Datastore{}
-		ds.Connect()
+		ds = &redis.Datastore{}
+	}
+
+	result := ds.Connect()
+	if !result {
+		log.Println("Datasore connection failed, exiting...")
+		os.Exit(1)
 	}
 }
 
