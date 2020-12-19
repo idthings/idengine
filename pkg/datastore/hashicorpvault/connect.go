@@ -16,6 +16,8 @@ type Datastore struct {
 // Returns:
 //   true if we connect and find Vault unsealed
 //   false otherwise
+//
+// implicitly this method returns "are we ready to process"
 func (d *Datastore) Connect() bool {
 
 	d.info() // set defaults or use env vars
@@ -27,7 +29,7 @@ func (d *Datastore) Connect() bool {
 	var err error
 	d.client, err = api.NewClient(config)
 	if err != nil {
-		log.Println("hashicorpvault.Connect(): connection failed. ", err.Error())
+		log.Println("hashicorpvault.Connect(): configuration failed. ", err.Error())
 		return false
 	}
 

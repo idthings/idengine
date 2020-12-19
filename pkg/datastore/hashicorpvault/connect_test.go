@@ -57,6 +57,42 @@ func TestConnectWithVault(t *testing.T) {
 	assert.Equal(t, true, result, testComment)
 }
 
+func TestConnectWithSealedVault(t *testing.T) {
+
+	const testComment = "Test with sealed Vault"
+
+	/*
+	 * Setup our cluster and env vars
+	 */
+
+	cluster := createVaultTestCluster(t)
+	defer cluster.Cleanup()
+
+	cluster.Cores[0].Seal(t)
+
+	// listener address is dynamic with TestCluster, so extract it now
+	listener := cluster.Cores[0].Listeners[0]
+	address := fmt.Sprintf("https://%s:%d", listener.Address.IP, listener.Address.Port)
+
+	// do not fail on self-signed certs during testing
+	os.Setenv("VAULT_SKIP_VERIFY", "true")
+	defer os.Unsetenv("VAULT_SKIP_VERIFY")
+
+	/*
+	 * Begin testing our own code
+	 */
+
+	// our vault client implementation finds the cluster address in this env var
+	os.Setenv("IDENGINE_VAULT_HOST", address)
+	defer os.Unsetenv("IDENGINE_VAULT_HOST")
+
+	v := Datastore{}
+	v.host = address
+
+	result := v.Connect()
+	assert.Equal(t, false, result, testComment)
+}
+
 func createVaultTestCluster(t *testing.T) *hashivault.TestCluster {
 
 	t.Helper()
