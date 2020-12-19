@@ -1,8 +1,8 @@
 package hashicorpvault
 
 import (
-	"os"
 	"log"
+	"os"
 )
 
 const (
@@ -10,7 +10,7 @@ const (
 	defaultToken = "developer"
 )
 
-// Info attempts to pull connection string from local env vars, or
+// info attempts to pull connection string from local env vars, or
 // set reasonable defaults
 func (d *Datastore) info() {
 
