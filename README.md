@@ -29,6 +29,7 @@ idEngine currently supports either Redis (default) or HashiCorp Vault backends.
 
 ### Quick Start
 To get up and running quickly, use docker-compose to deploy idengine, Redis and Vault containers.
+Vault is used as the backend datastore in this setup.
 ```
 $ git clone git@github.com:idthings/idengine.git
 Cloning into 'idengine'...
