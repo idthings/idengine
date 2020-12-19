@@ -2,4 +2,4 @@ package hashicorpvault
 
 import ()
 
-const defaultIdentitySecretKeyFormat = "app/identities/%s/secret"
+const defaultIdentitySecretKeyFormat = "secret/data/idengine/identities/%s"
