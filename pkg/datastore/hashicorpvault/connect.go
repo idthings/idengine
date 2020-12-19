@@ -25,7 +25,7 @@ func (d *Datastore) Connect() bool {
 	config := &api.Config{
 		Address: d.host,
 	}
-	log.Println(config)
+
 	var err error
 	d.client, err = api.NewClient(config)
 	if err != nil {
@@ -47,6 +47,6 @@ func (d *Datastore) Connect() bool {
 		return false
 	}
 
-	log.Printf("Successful connection to Vault node: %s\n", health.ClusterName)
+	log.Printf("hashicorpvault.Connect(): successful connection to Vault node: %s\n", health.ClusterName)
 	return true
 }
