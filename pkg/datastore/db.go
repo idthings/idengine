@@ -17,8 +17,8 @@ type Datastore struct {
 	client   *redis.Client
 }
 
-// Info set
-func (d *Datastore) Info() {
+// Info sets our env vars
+func (d *Datastore) info() {
 
 	var value string
 
@@ -46,14 +46,16 @@ func (d *Datastore) Info() {
 }
 
 // Connect to set Redis connection string
-func (d *Datastore) Connect() {
+func (d *Datastore) Connect() bool {
+
+	d.info()
 
 	connection := fmt.Sprintf("%s:%s", d.host, d.port)
 
 	i, err := strconv.Atoi(d.database)
 	if err != nil {
 		//fail
-		return
+		return false
 	}
 
 	// Get these from env
@@ -68,4 +70,6 @@ func (d *Datastore) Connect() {
 		fmt.Println("redis connect error: ", err)
 	}
 	fmt.Println("datastore.Connect(): connected to redis.")
+
+	return true
 }

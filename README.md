@@ -12,6 +12,8 @@ My approach is to treat an IoT device, and to a lesser extent a mobile app insta
 However, until a credential is deployed that device has no identity.
 Resetting the device turns it back into a mere receptacle.
 
+idEngine currently supports either Redis (default) or HashiCorp Vault backends.
+
 ### Project Goals
 * an easy to deploy identity and authentication container service
 * encourage dynamic credential automation for applications and infrastructure
@@ -26,41 +28,31 @@ Resetting the device turns it back into a mere receptacle.
 ---
 
 ### Quick Start
-To get up and running quickly, use docker-compose to deploy idengine and redis containers.
+To get up and running quickly, use docker-compose to deploy idengine, Redis and Vault containers.
+Vault is used as the backend datastore in this setup.
 ```
-# docker-compose.yml
-version: '3'
-services:
-    idengine:
-        image: thisdougb/idengine:latest
-        ports:
-            - "8000:8000"
-    redis:
-        image: redis:alpine
-        ports:
-            - "6379:6379"
-```
-Bring up the containers:
-```
+$ git clone git@github.com:idthings/idengine.git
+Cloning into 'idengine'...
+remote: Enumerating objects: 77, done.
+Receiving objects: 100% (547/547), 194.27 KiB | 612.00 KiB/s, done.
+Resolving deltas: 100% (257/257), done.
+$ cd idengine
 $ docker-compose up -d
-Creating network "root_default" with the default driver
-Pulling idengine (thisdougb/idengine:latest)...
-latest: Pulling from thisdougb/idengine
-188c0c94c7c5: Pull complete
-0ef7d3d256c8: Pull complete
-eb1a45c31d19: Pull complete
-53441b811652: Pull complete
-Pulling redis (redis:alpine)...
-alpine: Pulling from library/redis
-67b3665cee45: Pull complete
-0705890dd1f7: Pull complete
-Creating root_idengine_1 ... done
-Creating root_redis_1    ... done
+Creating network "idengine_default" with the default driver
+Creating idengine_idengine_1 ... done
+Creating idengine_redis_1    ... done
+Creating idengine_vault_1    ... done
+$
+$ docker ps --format "{{.ID}}:\t{{.Image}}\t{{.Status}}"
+7e2880096d42:	thisdougb/idengine:latest	Up 1 second
+870b7c2bcde2:	vault:latest	Up 1 second
+dbdfbd615920:	redis:alpine	Up 1 second
+$
 ```
-And quick test:
+And quick test, get a new identity that can now be authenticated:
 ```
 $ curl localhost:8000/identities/new/
-{3bbaa59a-a78c-4665-8b86-c7f31276bd83,D4K80A2NN@C@YjQ%66*n}
+{"id":"30381b07-0bf8-4a93-9c6f-8e658690d090","secret":"5kO0%9HTJmX%7&d)VrC7"}
 ```
 
 ---
