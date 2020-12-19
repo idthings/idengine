@@ -1,5 +1,14 @@
+# docker-compose.yml
 version: '3'
 services:
+    idengine:
+        image: thisdougb/idengine:latest
+        ports:
+            - "8000:8000"
+        environment:
+            - IDENGINE_VAULT_HOST=http://vault:8201 # developer mode http
+            - IDENGINE_VAULT_TOKEN=developer
+        command: /app/idengine -vault # use the HashiCorp Vault datastore
 
     redis:
         image: redis:alpine
