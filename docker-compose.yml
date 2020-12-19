@@ -14,6 +14,8 @@ services:
       volumes:
           - .vault/config:/vault/config:rw
       environment:
+        - VAULT_ADDR='http://127.0.0.1:8200' # developer mode http
+        - VAULT_TOKEN=developer
         - VAULT_DEV_ROOT_TOKEN_ID=developer
         - VAULT_LOG_LEVEL=debug
       cap_add:
