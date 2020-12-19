@@ -6,7 +6,7 @@ services:
         ports:
             - "6379:6379"
 
-    # HashiCorp Vault in developer mode
+    # HashiCorp Vault in developer mode, see config/vault.json
     vault:
       image: vault:latest
       ports:
@@ -14,7 +14,7 @@ services:
       volumes:
           - .vault/config:/vault/config:rw
       environment:
-        - VAULT_ADDR='http://127.0.0.1:8200' # developer mode http
+        - VAULT_ADDR=http://127.0.0.1:8201 # developer mode http
         - VAULT_TOKEN=developer
         - VAULT_DEV_ROOT_TOKEN_ID=developer
         - VAULT_LOG_LEVEL=debug
