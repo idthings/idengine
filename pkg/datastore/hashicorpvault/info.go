@@ -32,3 +32,6 @@ func (d *Datastore) info() {
 		d.token = defaultToken
 	}
 }
+
+// Info conforms
+func (d *Datastore) Info() {}

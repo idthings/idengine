@@ -1,20 +1,40 @@
 package webserver
 
 import (
+	"flag"
 	"github.com/idthings/idengine/pkg/datastore"
+	"github.com/idthings/idengine/pkg/datastore/hashicorpvault"
 	"log"
 	"net/http"
+	"os"
+	"time"
 )
 
 const webserverPort = "8000"
 
 var (
-	ds = datastore.Datastore{}
+	ds datastore.Interface
 )
 
 func init() {
-	ds.Info()
-	ds.Connect()
+
+	vaultPtr := flag.Bool("vault", false, "use Vault datastore")
+	flag.Parse()
+
+	if *vaultPtr {
+
+		ds = &hashicorpvault.Datastore{}
+
+		result := ds.Connect()
+		if !result {
+			log.Println("Vault connection failed, exiting after 1 seconds.")
+			time.Sleep(1 * time.Second)
+			os.Exit(1)
+		}
+	} else {
+		ds = &datastore.Datastore{}
+		ds.Connect()
+	}
 }
 
 // Start starts

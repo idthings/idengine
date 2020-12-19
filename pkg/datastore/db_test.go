@@ -72,7 +72,7 @@ func TestInfo(t *testing.T) {
 		}
 
 		var ds Datastore
-		ds.Info()
+		ds.info()
 
 		assert.Equal(t, item.expectHost, ds.host, item.comment)
 		assert.Equal(t, item.expectPort, ds.port, item.comment)
