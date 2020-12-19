@@ -1,10 +1,9 @@
-package datastore
+package redis
 
 import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
-	"os"
 	"strconv"
 )
 
@@ -15,34 +14,6 @@ type Datastore struct {
 	database string
 	ctx      context.Context
 	client   *redis.Client
-}
-
-// Info sets our env vars
-func (d *Datastore) info() {
-
-	var value string
-
-	value = os.Getenv("IDENGINE_DB_HOST")
-	if len(value) > 0 {
-		d.host = value
-	} else {
-		d.host = "127.0.0.1"
-	}
-
-	value = os.Getenv("IDENGINE_DB_PORT")
-	if len(value) > 0 {
-		d.port = value
-	} else {
-		d.port = "6379"
-	}
-	value = os.Getenv("IDENGINE_DB_DATABASE")
-	if len(value) > 0 {
-		d.database = value
-	} else {
-		d.database = "0"
-	}
-
-	d.ctx = context.Background()
 }
 
 // Connect to set Redis connection string

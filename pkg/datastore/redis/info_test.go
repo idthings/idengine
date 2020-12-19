@@ -1,4 +1,4 @@
-package datastore
+package redis
 
 import (
 	"github.com/stretchr/testify/assert"

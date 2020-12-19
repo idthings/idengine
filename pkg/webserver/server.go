@@ -4,6 +4,7 @@ import (
 	"flag"
 	"github.com/idthings/idengine/pkg/datastore"
 	"github.com/idthings/idengine/pkg/datastore/hashicorpvault"
+	"github.com/idthings/idengine/pkg/datastore/redis"
 	"log"
 	"net/http"
 	"os"
@@ -32,7 +33,7 @@ func init() {
 			os.Exit(1)
 		}
 	} else {
-		ds = &datastore.Datastore{}
+		ds = &redis.Datastore{}
 		ds.Connect()
 	}
 }
