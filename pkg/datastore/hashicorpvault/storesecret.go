@@ -27,13 +27,10 @@ func (d *Datastore) StoreSecret(ctx context.Context, id string, secret string) e
 	}
 
 	l := d.client.Logical()
-	response, err := l.Write(path, payload)
+	_, err := l.Write(path, payload)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println("hashicorpvault.StoreSecret(): ", payload)
-	fmt.Println("hashicorpvault.StoreSecret(): ", response)
 
 	return nil
 }
