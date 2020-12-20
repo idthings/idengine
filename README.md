@@ -15,15 +15,14 @@ Resetting the device turns it back into a mere receptacle.
 idEngine currently supports either Redis (default) or HashiCorp Vault backends.
 
 ### Project Goals
-* an easy to deploy identity and authentication container service
-* encourage dynamic credential automation for applications and infrastructure
-* develop a simple and understandable implementation
+* simplify the path to deploy best-practice for managing credentials
+* an easy to deploy, secure credential store
+* encourage the use of dynamic credentials and high-frequency secret rotation
 
 ### Audience
 * IoT hackers and makers, who need easy to test and deploy credentials
-* Developers in a micro-service environment, or building mobile apps with minimal backend APIs
-* DevOps folk who need to manage storage and services containing credentials
-* People interested in improving on the traditional user/password key-pair approach
+* Developers in a micro-service environment, who need a simple, fast, secure credential store
+* People interested in improving on the legacy user/password key-pair approach
 
 ---
 
@@ -53,6 +52,18 @@ And quick test, get a new identity that can now be authenticated:
 ```
 $ curl localhost:8000/identities/new/
 {"id":"30381b07-0bf8-4a93-9c6f-8e658690d090","secret":"5kO0%9HTJmX%7&d)VrC7"}
+```
+
+To stop the idengine environment:
+```
+$ docker-compose down
+Stopping idengine_redis_1 ... done
+Stopping idengine_vault_1 ... done
+Removing idengine_redis_1    ... done
+Removing idengine_vault_1    ... done
+Removing idengine_idengine_1 ... done
+Removing network idengine_default
+$
 ```
 
 ---
