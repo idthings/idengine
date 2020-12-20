@@ -1,4 +1,4 @@
-name: idengine develop
+name: branches
 
 # pushing to branches runs tests, but doesn't build or push to DockerHub.
 # for the main branch we run on a pull request.
@@ -8,13 +8,15 @@ on:
       branches:
           - '*'
           - '!main'
+          - '!develop'
   pull_request:
       branches:
           - 'main'
+          - 'develop'
 
 jobs:
     build:
-        name: idengine
+        name: branch build
         runs-on: ubuntu-latest
 
         # Service containers to run with `container-job`
