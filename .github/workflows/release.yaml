@@ -1,4 +1,4 @@
-name: idengine release
+name: release
 
 # on creating a release we run the usual tests, then build and push to DockerHub
 # tagging as latest and vX.X.X
@@ -9,7 +9,7 @@ on:
 
 jobs:
     build:
-        name: idengine
+        name: release build
         runs-on: ubuntu-latest
 
         # Service containers to run with `container-job`
