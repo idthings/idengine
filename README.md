@@ -15,14 +15,14 @@ Resetting the device turns it back into a mere receptacle.
 idEngine currently supports either Redis (default) or HashiCorp Vault backends.
 
 ### Project Goals
-* simplify the path to deploy best-practice for credentials
-* an easy to deploy secure credential store
-* encourage dynamic credential creation and automated secret rotation
+* simplify the path to deploy best-practice for managing credentials
+* an easy to deploy, secure credential store
+* encourage the use of dynamic credentials and high-frequency secret rotation
 
 ### Audience
 * IoT hackers and makers, who need easy to test and deploy credentials
 * Developers in a micro-service environment, who need a simple, fast, secure credential store
-* People interested in improving on the traditional user/password key-pair approach
+* People interested in improving on the legacy user/password key-pair approach
 
 ---
 
