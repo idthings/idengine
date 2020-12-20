@@ -1,0 +1,81 @@
+name: idengine release
+
+# on creating a release we run the usual tests, then build and push to DockerHub
+# tagging as latest and vX.X.X
+
+on:
+  release:
+      types: created
+
+jobs:
+    build:
+        name: idengine
+        runs-on: ubuntu-latest
+
+        # Service containers to run with `container-job`
+        services:
+            # Label used to access the service container
+            redis:
+                # Docker Hub image
+                image: redis
+                # Set health checks to wait until redis has started
+                options: >-
+                  --health-cmd "redis-cli ping"
+                  --health-interval 10s
+                  --health-timeout 5s
+                  --health-retries 5
+                ports:
+                  - 6379:6379
+
+        steps:
+        - name: Branch name
+          id: branch_name
+          run: |
+              echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+              echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+              echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+
+        - name: Show available tags vars
+          run: |
+              echo $SOURCE_NAME
+              echo $SOURCE_BRANCH
+              echo $SOURCE_TAG
+          env:
+              SOURCE_NAME: ${{ steps.branch_name.outputs.SOURCE_NAME }}
+              SOURCE_BRANCH: ${{ steps.branch_name.outputs.SOURCE_BRANCH }}
+              SOURCE_TAG: ${{ steps.branch_name.outputs.SOURCE_TAG }}
+
+        - name: Set up Go 1.x
+          uses: actions/setup-go@v2
+          with:
+            go-version: 1.14
+          id: go
+
+        - name: Check out code into the Go module directory
+          uses: actions/checkout@v2
+
+        - name: Get dependencies
+          run: |
+            go get -v -t -d ./...
+            if [ -f Gopkg.toml ]; then
+                curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+                dep ensure
+            fi
+
+        - name: Go Unit Test
+          run: go test ./... -count=1
+          env:
+            CK_HOST: localhost
+            CK_PORT: 6379
+
+        - name: Build
+          run: go build -v -o idengine cmd/idengine/*.go
+
+        - if: github.event_name == 'push' # && github.ref == 'refs/heads/master'
+          name: Deploy To Docker
+          uses: docker/build-push-action@v1.1.0
+          with:
+              username: ${{ secrets.DOCKER_USERNAME }}
+              password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+              repository: thisdougb/idengine
+              tags: latest, ${{ steps.branch_name.outputs.SOURCE_TAG }}
