@@ -71,8 +71,7 @@ jobs:
         - name: Build
           run: go build -v -o idengine cmd/idengine/*.go
 
-        - if: github.event_name == 'push' # && github.ref == 'refs/heads/master'
-          name: Deploy To Docker
+        - name: Deploy To Docker
           uses: docker/build-push-action@v1.1.0
           with:
               username: ${{ secrets.DOCKER_USERNAME }}
